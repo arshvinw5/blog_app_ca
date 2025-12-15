@@ -1,28 +1,26 @@
 import 'package:ca_blog_app/core/theme/app_pallete.dart';
-import 'package:ca_blog_app/features/auth/presentation/pages/sign_in_screen.dart';
+import 'package:ca_blog_app/features/auth/presentation/pages/sign_up_screen.dart';
 import 'package:ca_blog_app/features/auth/presentation/widgets/auth_feild.dart';
 import 'package:ca_blog_app/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:flutter/material.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignInScreen extends StatefulWidget {
   static MaterialPageRoute<dynamic> route() =>
-      MaterialPageRoute(builder: (context) => const SignInScreen());
+      MaterialPageRoute(builder: (context) => const SignUpScreen());
 
-  const SignUpScreen({super.key});
+  const SignInScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignInScreenState extends State<SignInScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -31,7 +29,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Form(
@@ -41,11 +38,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               _buildMainText(),
               const SizedBox(height: 30),
-              CustomTextFormField(
-                hintText: "Name ",
-                controller: _nameController,
-              ),
-              const SizedBox(height: 10),
               CustomTextFormField(
                 hintText: "Email",
                 controller: _emailController,
@@ -57,7 +49,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 isObscureText: true,
               ),
               const SizedBox(height: 30),
-              const AuthGradientButton(buttonText: "Sign Up"),
+              const AuthGradientButton(buttonText: "Sign In"),
               const SizedBox(height: 20),
               _richText(),
             ],
@@ -70,7 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Main Text
   Widget _buildMainText() {
     return Text(
-      "Sign Up",
+      "Welcome Back",
       style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
     );
   }
@@ -78,15 +70,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget _richText() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, SignUpScreen.route());
+        Navigator.push(context, SignInScreen.route());
       },
       child: RichText(
         text: TextSpan(
-          text: "Already have an account? ",
+          text: "Don't have an account?",
           style: TextStyle(color: Colors.grey, fontSize: 16),
           children: [
             TextSpan(
-              text: " Sign In",
+              text: " Sign Up",
               style: TextStyle(
                 color: AppPallete.gradient2,
                 fontSize: 16,
