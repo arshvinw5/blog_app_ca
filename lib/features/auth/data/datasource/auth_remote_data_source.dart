@@ -8,10 +8,10 @@ abstract interface class AuthRemoteDataSource {
     required String password,
   });
 
-  Future<String> signinWithCredentials({
-    required String email,
-    required String password,
-  });
+  // Future<String> signinWithCredentials({
+  //   required String email,
+  //   required String password,
+  // });
 }
 
 //pupose of creating this is to mkae internal data sources calls
@@ -43,11 +43,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
   }
 
-  @override
-  Future<String> signinWithCredentials({
-    required String email,
-    required String password,
-  }) async {
-    //TODO: implement signinWithCredentials
-  }
+  // @override
+  // Future<String> signinWithCredentials({
+  //   required String email,
+  //   required String password,
+  // }) async {
+  //   //TODO: implement signinWithCredentials
+  // }
 }

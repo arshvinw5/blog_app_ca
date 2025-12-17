@@ -1,8 +1,10 @@
 import 'package:ca_blog_app/core/theme/app_pallete.dart';
+import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:ca_blog_app/features/auth/presentation/pages/sign_in_screen.dart';
 import 'package:ca_blog_app/features/auth/presentation/widgets/auth_feild.dart';
 import 'package:ca_blog_app/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignUpScreen extends StatefulWidget {
   static MaterialPageRoute<dynamic> route() =>
@@ -32,37 +34,73 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildMainText(),
-              const SizedBox(height: 30),
-              CustomTextFormField(
-                hintText: "Name ",
-                controller: _nameController,
+      body: BlocConsumer<AuthBlocBloc, AuthBlocState>(
+        listener: (context, state) {
+          if (state is AuthSuccessState) {
+            // Navigate to home screen or show success message
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Sign Up Successful! User ID: ${state.userId}'),
+                backgroundColor: AppPallete.gradient3,
               ),
-              const SizedBox(height: 10),
-              CustomTextFormField(
-                hintText: "Email",
-                controller: _emailController,
+            );
+          } else if (state is AuthFailureState) {
+            // Show error message
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Sign Up Failed: ${state.message.toString()}'),
+                backgroundColor: AppPallete.errorColor,
               ),
-              const SizedBox(height: 10),
-              CustomTextFormField(
-                hintText: "Password",
-                controller: _passwordController,
-                isObscureText: true,
+            );
+          }
+        },
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildMainText(),
+                  const SizedBox(height: 30),
+                  CustomTextFormField(
+                    hintText: "Name ",
+                    controller: _nameController,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextFormField(
+                    hintText: "Email",
+                    controller: _emailController,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextFormField(
+                    hintText: "Password",
+                    controller: _passwordController,
+                    isObscureText: true,
+                  ),
+                  const SizedBox(height: 30),
+                  AuthGradientButton(
+                    buttonText: "Sign Up",
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthBlocBloc>().add(
+                          AuthSignUp(
+                            name: _nameController.text,
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _richText(),
+                ],
               ),
-              const SizedBox(height: 30),
-              const AuthGradientButton(buttonText: "Sign Up"),
-              const SizedBox(height: 20),
-              _richText(),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
