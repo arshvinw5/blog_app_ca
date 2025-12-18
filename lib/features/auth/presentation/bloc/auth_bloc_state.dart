@@ -10,8 +10,8 @@ final class AuthBlocInitial extends AuthBlocState {}
 final class AuthLoadingState extends AuthBlocState {}
 
 final class AuthSuccessState extends AuthBlocState {
-  final String userId;
-  const AuthSuccessState(this.userId);
+  final User user;
+  const AuthSuccessState(this.user);
 }
 
 final class AuthFailureState extends AuthBlocState {

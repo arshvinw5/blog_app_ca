@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:ca_blog_app/features/auth/domain/entities/user.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_signup.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,7 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     //this is the place to return success or failure states
     res.fold(
       (failure) => emit(AuthFailureState(failure.message)),
-      (uId) => emit(AuthSuccessState(uId)),
+      (user) => emit(AuthSuccessState(user)),
     );
   }
 }

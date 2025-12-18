@@ -1,4 +1,6 @@
+import 'package:ca_blog_app/core/common/widgets/loader.dart';
 import 'package:ca_blog_app/core/theme/app_pallete.dart';
+import 'package:ca_blog_app/core/utils/show_snackbar.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:ca_blog_app/features/auth/presentation/pages/sign_in_screen.dart';
 import 'package:ca_blog_app/features/auth/presentation/widgets/auth_feild.dart';
@@ -34,30 +36,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocConsumer<AuthBlocBloc, AuthBlocState>(
-        listener: (context, state) {
-          if (state is AuthSuccessState) {
-            // Navigate to home screen or show success message
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Sign Up Successful! User ID: ${state.userId}'),
-                backgroundColor: AppPallete.gradient3,
-              ),
-            );
-          } else if (state is AuthFailureState) {
-            // Show error message
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Sign Up Failed: ${state.message.toString()}'),
-                backgroundColor: AppPallete.errorColor,
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Form(
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: BlocConsumer<AuthBlocBloc, AuthBlocState>(
+          listener: (context, state) {
+            if (state is AuthFailureState) {
+              showSnackBar(context, state.message);
+            }
+          },
+          builder: (context, state) {
+            if (state is AuthLoadingState) {
+              return const Loader();
+            }
+            return Form(
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -98,9 +89,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   _richText(),
                 ],
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
