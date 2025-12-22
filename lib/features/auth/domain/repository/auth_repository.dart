@@ -3,7 +3,7 @@ import 'package:ca_blog_app/features/auth/domain/entities/user.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract interface class AuthRepository {
-  Future<Either<Failures, void>> signIn({
+  Future<Either<Failures, User>> signIn({
     required String email,
     required String password,
   });
