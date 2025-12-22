@@ -9,10 +9,10 @@ abstract interface class AuthRemoteDataSource {
     required String password,
   });
 
-  // Future<UserModel> signinWithCredentials({
-  //   required String email,
-  //   required String password,
-  // });
+  Future<UserModel> signinWithCredentials({
+    required String email,
+    required String password,
+  });
 }
 
 //pupose of creating this is to mkae internal data sources calls
@@ -44,11 +44,24 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
   }
 
-  // @override
-  // Future<String> signinWithCredentials({
-  //   required String email,
-  //   required String password,
-  // }) async {
-  //   //TODO: implement signinWithCredentials
-  // }
+  @override
+  Future<UserModel> signinWithCredentials({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await supabaseClient.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      if (response.user == null) {
+        throw ServerException('Signin failed');
+      }
+
+      return UserModel.fromJson(response.user!.toJson());
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
 }
