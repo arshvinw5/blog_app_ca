@@ -39,7 +39,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       return UserModel.fromJson(response.user!.toJson());
+    } on AuthException catch (e) {
+      throw ServerException(e.message);
     } catch (e) {
+      // we are convering e. to string because it can be of any type
       throw ServerException(e.toString());
     }
   }
@@ -60,7 +63,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       return UserModel.fromJson(response.user!.toJson());
+    } on AuthException catch (e) {
+      throw ServerException(e.message);
     } catch (e) {
+      // we are convering e. to string because it can be of any type
       throw ServerException(e.toString());
     }
   }

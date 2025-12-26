@@ -41,7 +41,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: BlocConsumer<AuthBlocBloc, AuthBlocState>(
           listener: (context, state) {
             if (state is AuthFailureState) {
-              showSnackBar(context, state.message);
+              showSnackBar(
+                context,
+                state.message,
+                fontSize: 15.0,
+                backgroundColor: AppPallete.errorColor,
+                textColor: AppPallete.textColor,
+              );
             }
           },
           builder: (context, state) {
@@ -77,12 +83,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if (_formKey.currentState!.validate()) {
                         context.read<AuthBlocBloc>().add(
                           AuthSignUp(
-                            name: _nameController.text,
-                            email: _emailController.text,
-                            password: _passwordController.text,
+                            name: _nameController.text.trim(),
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
                           ),
                         );
                       }
+                      _nameController.clear();
+                      _emailController.clear();
+                      _passwordController.clear();
                     },
                   ),
                   const SizedBox(height: 20),

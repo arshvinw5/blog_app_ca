@@ -1,8 +1,12 @@
+import 'package:ca_blog_app/core/common/widgets/loader.dart';
 import 'package:ca_blog_app/core/theme/app_pallete.dart';
+import 'package:ca_blog_app/core/utils/show_snackbar.dart';
+import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:ca_blog_app/features/auth/presentation/pages/sign_up_screen.dart';
 import 'package:ca_blog_app/features/auth/presentation/widgets/auth_feild.dart';
 import 'package:ca_blog_app/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignInScreen extends StatefulWidget {
   static MaterialPageRoute<dynamic> route() =>
@@ -31,29 +35,64 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildMainText(),
-              const SizedBox(height: 30),
-              CustomTextFormField(
-                hintText: "Email",
-                controller: _emailController,
+        child: BlocConsumer<AuthBlocBloc, AuthBlocState>(
+          listener: (context, state) {
+            if (state is AuthFailureState) {
+              showSnackBar(
+                context,
+                state.message,
+                textColor: AppPallete.textColor,
+                backgroundColor: AppPallete.errorColor,
+                fontSize: 15.0,
+              );
+            } else if (state is AuthSuccessState) {
+              print("User from user model: ${state.user.name}");
+            }
+          },
+          builder: (context, state) {
+            if (state is AuthLoadingState) {
+              return const Loader();
+            }
+
+            return Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildMainText(),
+                  const SizedBox(height: 30),
+                  CustomTextFormField(
+                    hintText: "Email",
+                    controller: _emailController,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextFormField(
+                    hintText: "Password",
+                    controller: _passwordController,
+                    isObscureText: true,
+                  ),
+                  const SizedBox(height: 30),
+                  AuthGradientButton(
+                    buttonText: "Sign In",
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthBlocBloc>().add(
+                          AuthLogin(
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
+                          ),
+                        );
+                      }
+                      _emailController.clear();
+                      _passwordController.clear();
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _richText(),
+                ],
               ),
-              const SizedBox(height: 10),
-              CustomTextFormField(
-                hintText: "Password",
-                controller: _passwordController,
-                isObscureText: true,
-              ),
-              const SizedBox(height: 30),
-              AuthGradientButton(buttonText: "Sign In", onTap: () {}),
-              const SizedBox(height: 20),
-              _richText(),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
