@@ -23,32 +23,29 @@ Future<void> initDependancies() async {
 
 void _initAuth() {
   //auth remote data source
-  serviceLocator.registerFactory<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(
-      supabaseClient: serviceLocator<SupabaseClient>(),
-    ),
-  );
-
-  //auth repository
-  serviceLocator.registerFactory<AuthRepository>(
-    () => AuthRepositoryImpl(serviceLocator<AuthRemoteDataSource>()),
-  );
-
-  //usecases signup
-  serviceLocator.registerFactory<UserSignUp>(
-    () => UserSignUp(serviceLocator<AuthRepository>()),
-  );
-
-  //usecase login
-  serviceLocator.registerFactory<UserLogin>(
-    () => UserLogin(serviceLocator<AuthRepository>()),
-  );
-
-  //auth bloc
-  serviceLocator.registerLazySingleton<AuthBlocBloc>(
-    () => AuthBlocBloc(
-      userSignUp: serviceLocator<UserSignUp>(),
-      userLogin: serviceLocator<UserLogin>(),
-    ),
-  );
+  serviceLocator
+    ..registerFactory<AuthRemoteDataSource>(
+      () => AuthRemoteDataSourceImpl(
+        supabaseClient: serviceLocator<SupabaseClient>(),
+      ),
+    )
+    //auth repository
+    ..registerFactory<AuthRepository>(
+      () => AuthRepositoryImpl(serviceLocator<AuthRemoteDataSource>()),
+    )
+    //usecases signup
+    ..registerFactory<UserSignUp>(
+      () => UserSignUp(serviceLocator<AuthRepository>()),
+    )
+    //usecase login
+    ..registerFactory<UserLogin>(
+      () => UserLogin(serviceLocator<AuthRepository>()),
+    )
+    //auth bloc
+    ..registerLazySingleton<AuthBlocBloc>(
+      () => AuthBlocBloc(
+        userSignUp: serviceLocator<UserSignUp>(),
+        userLogin: serviceLocator<UserLogin>(),
+      ),
+    );
 }

@@ -53,4 +53,19 @@ class AuthRepositoryImpl implements AuthRepository {
       return left(Failures(e.message));
     }
   }
+
+  @override
+  Future<Either<Failures, User>> getCurrentUserProfile() async {
+    try {
+      // getting string => map of user from data layer then converting to entity in domain layer
+      final user = await remoteDataSource.getCurrentUserProfile();
+
+      if (user == null) {
+        return left(Failures('No user profile found'));
+      }
+      return right(user);
+    } on ServerException catch (e) {
+      return left(Failures(e.message));
+    }
+  }
 }

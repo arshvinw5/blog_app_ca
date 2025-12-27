@@ -15,7 +15,7 @@ abstract interface class AuthRepository {
   });
 
   Future<Either<Failures, void>> signOut();
+
+  //to fetch user profile without parameters
+  Future<Either<Failures, User>> getCurrentUserProfile();
 }
-
-
-//TODO : have to chnage return type of successful sign in and sign up to user model 
