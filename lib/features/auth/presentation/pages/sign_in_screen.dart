@@ -46,7 +46,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 fontSize: 15.0,
               );
             } else if (state is AuthSuccessState) {
-              print("User from user model: ${state.user.name}");
+              print("User from user model: ${state.user.email}");
             }
           },
           builder: (context, state) {

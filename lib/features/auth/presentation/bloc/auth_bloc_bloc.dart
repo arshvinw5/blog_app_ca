@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:ca_blog_app/core/usecase/usecase.dart';
 import 'package:ca_blog_app/features/auth/domain/entities/user.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_login.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_signup.dart';
+import 'package:ca_blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:flutter/material.dart';
 
 part 'auth_bloc_event.dart';
@@ -10,19 +12,22 @@ part 'auth_bloc_state.dart';
 class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
   final UserSignUp _userSignUp;
   final UserLogin _userLogin;
+  final CurrentUser _currentUser;
 
-  //Named Arguments = Called like: AuthBlocBloc(userSignUp: myUserSignUp)
-
-  AuthBlocBloc({required UserSignUp userSignUp, required UserLogin userLogin})
-    : _userSignUp = userSignUp,
-      _userLogin = userLogin,
-
-      super(AuthBlocInitial()) {
+  AuthBlocBloc({
+    required UserSignUp userSignUp,
+    required UserLogin userLogin,
+    required CurrentUser currentUser,
+  }) : _userSignUp = userSignUp,
+       _userLogin = userLogin,
+       _currentUser = currentUser,
+       super(AuthBlocInitial()) {
     on<AuthSignUp>(_onSignUp);
     on<AuthLogin>(_onLogin);
+    on<AuthGetCurrentUser>(_onGetCurrentUser);
   }
 
-  void _onSignUp(AuthSignUp event, Emitter<AuthBlocState> emit) async {
+  Future<void> _onSignUp(AuthSignUp event, Emitter<AuthBlocState> emit) async {
     emit(AuthLoadingState());
 
     final res = await _userSignUp(
@@ -33,14 +38,13 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
       ),
     );
 
-    //this is the place to return success or failure states
     res.fold(
       (failure) => emit(AuthFailureState(failure.message)),
       (user) => emit(AuthSuccessState(user)),
     );
   }
 
-  void _onLogin(AuthLogin event, Emitter<AuthBlocState> emit) async {
+  Future<void> _onLogin(AuthLogin event, Emitter<AuthBlocState> emit) async {
     emit(AuthLoadingState());
 
     final res = await _userLogin(
@@ -50,6 +54,28 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     res.fold(
       (failure) => emit(AuthFailureState(failure.message)),
       (user) => emit(AuthSuccessState(user)),
+    );
+  }
+
+  Future<void> _onGetCurrentUser(
+    AuthGetCurrentUser event,
+    Emitter<AuthBlocState> emit,
+  ) async {
+    emit(AuthLoadingState());
+
+    final res = await _currentUser(NoParams());
+
+    print('Result: $res');
+
+    res.fold(
+      (failure) {
+        emit(AuthFailureState(failure.message));
+        print('Failure: ${failure.message}');
+      },
+      (user) {
+        print('Current User: ${user.email}');
+        emit(AuthSuccessState(user));
+      },
     );
   }
 }

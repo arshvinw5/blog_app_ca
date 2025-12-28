@@ -7,7 +7,18 @@ class UserModel extends User {
     return UserModel(
       id: json['id'] ?? '',
       email: json['email'] ?? '',
-      name: json['name'] ?? '',
+      // Handle both formats: direct 'name' field (from profiles table)
+      // or nested in 'user_metadata' (from auth response)
+      name: json['name'] ?? json['user_metadata']?['name'] ?? '',
+    );
+  }
+
+  //to have a copy of user model with modified fields
+  UserModel copyWith({String? id, String? name, String? email}) {
+    return UserModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
     );
   }
 }

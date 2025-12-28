@@ -75,7 +75,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on AuthException catch (e) {
       throw ServerException(e.message);
     } catch (e) {
-      // we are converting e. to string because it can be of any type
       throw ServerException(e.toString());
     }
   }
@@ -91,7 +90,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             .eq('id', currentSession!.user.id)
             .single();
 
-        return UserModel.fromJson(userData);
+        return UserModel.fromJson(userData).copyWith(
+          //we don't email column in profile table so we are getting email from current session
+          email: currentSession!.user.email!,
+        );
       }
       //if user is not logged in
       return null;

@@ -4,6 +4,7 @@ import 'package:ca_blog_app/features/auth/data/repository/auth_repository_impl.d
 import 'package:ca_blog_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_login.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_signup.dart';
+import 'package:ca_blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -33,19 +34,26 @@ void _initAuth() {
     ..registerFactory<AuthRepository>(
       () => AuthRepositoryImpl(serviceLocator<AuthRemoteDataSource>()),
     )
-    //usecases signup
+    //usecase signup
     ..registerFactory<UserSignUp>(
       () => UserSignUp(serviceLocator<AuthRepository>()),
     )
     //usecase login
+    //this is positional parameter style and argument is passed by position [order of the parameters is matters ]
     ..registerFactory<UserLogin>(
       () => UserLogin(serviceLocator<AuthRepository>()),
+    )
+    //usecase current user
+    //this is named parameter style and argument is passed by specific name
+    ..registerFactory<CurrentUser>(
+      () => CurrentUser(authRepository: serviceLocator<AuthRepository>()),
     )
     //auth bloc
     ..registerLazySingleton<AuthBlocBloc>(
       () => AuthBlocBloc(
         userSignUp: serviceLocator<UserSignUp>(),
         userLogin: serviceLocator<UserLogin>(),
+        currentUser: serviceLocator<CurrentUser>(),
       ),
     );
 }
