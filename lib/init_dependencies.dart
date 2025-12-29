@@ -4,6 +4,7 @@ import 'package:ca_blog_app/features/auth/data/datasource/auth_remote_data_sourc
 import 'package:ca_blog_app/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:ca_blog_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_login.dart';
+import 'package:ca_blog_app/features/auth/domain/usecases/auth_signout.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_signup.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
@@ -47,6 +48,10 @@ void _initAuth() {
     ..registerFactory<UserLogin>(
       () => UserLogin(serviceLocator<AuthRepository>()),
     )
+    //userlogout
+    ..registerFactory<UserSignOut>(
+      () => UserSignOut(serviceLocator<AuthRepository>()),
+    )
     //usecase current user
     //this is named parameter style and argument is passed by specific name
     ..registerFactory<CurrentUser>(
@@ -58,6 +63,7 @@ void _initAuth() {
         userSignUp: serviceLocator<UserSignUp>(),
         userLogin: serviceLocator<UserLogin>(),
         currentUser: serviceLocator<CurrentUser>(),
+        userSignOut: serviceLocator<UserSignOut>(),
         appUserCubit: serviceLocator<AppUserCubit>(),
       ),
     );

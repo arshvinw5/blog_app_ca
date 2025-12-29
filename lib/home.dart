@@ -1,4 +1,5 @@
 import 'package:ca_blog_app/core/cubits/cubit/app_user_cubit.dart';
+import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:ca_blog_app/features/auth/presentation/pages/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,9 +20,19 @@ class _HomeState extends State<Home> {
       },
       builder: (context, isLoggedIn) {
         if (isLoggedIn) {
-          return const Scaffold(
+          return Scaffold(
             body: Center(
-              child: Text('Welcome to CA Blog App! You are logged in.'),
+              child: Column(
+                children: [
+                  Text('Welcome to CA Blog App! You are logged in.'),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthBlocBloc>().add(AuthLogout());
+                    },
+                    child: Text('Logout'),
+                  ),
+                ],
+              ),
             ),
           );
         }

@@ -18,6 +18,10 @@ final class AuthLogin extends AuthBlocEvent {
   AuthLogin({required this.email, required this.password});
 }
 
+final class AuthLogout extends AuthBlocEvent {
+  AuthLogout();
+}
+
 final class AuthGetCurrentUser extends AuthBlocEvent {
   AuthGetCurrentUser();
 }

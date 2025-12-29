@@ -18,6 +18,9 @@ abstract interface class AuthRemoteDataSource {
 
   //to fetch user from user profile table from supabase without parameters
   Future<UserModel?> getCurrentUserProfile();
+
+  //to sign out user
+  Future<void> signOut();
 }
 
 //purpose of creating this is to make internal data sources calls
@@ -99,6 +102,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
       //if user is not logged in
       return null;
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> signOut() {
+    try {
+      if (currentSession == null) {
+        throw ServerException('No user is currently signed in.');
+      }
+      return supabaseClient.auth.signOut();
     } catch (e) {
       throw ServerException(e.toString());
     }
