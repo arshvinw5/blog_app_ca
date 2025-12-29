@@ -1,3 +1,4 @@
+import 'package:ca_blog_app/core/cubits/cubit/app_user_cubit.dart';
 import 'package:ca_blog_app/core/theme/theme.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:ca_blog_app/home.dart';
@@ -14,6 +15,9 @@ void main() async {
   runApp(
     MultiBlocProvider(
       providers: [
+        BlocProvider<AppUserCubit>(
+          create: (_) => serviceLocator<AppUserCubit>(),
+        ),
         BlocProvider<AuthBlocBloc>(
           create: (_) => serviceLocator<AuthBlocBloc>(),
         ),
