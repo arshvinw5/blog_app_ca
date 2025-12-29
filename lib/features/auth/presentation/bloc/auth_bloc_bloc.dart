@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:ca_blog_app/core/cubits/cubit/app_user_cubit.dart';
 import 'package:ca_blog_app/core/usecase/usecase.dart';
-import 'package:ca_blog_app/features/auth/domain/entities/user.dart';
+import 'package:ca_blog_app/core/common/entities/user.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_login.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_signup.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/current_user.dart';
@@ -13,14 +14,17 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
   final UserSignUp _userSignUp;
   final UserLogin _userLogin;
   final CurrentUser _currentUser;
+  final AppUserCubit _appUserCubit;
 
   AuthBlocBloc({
     required UserSignUp userSignUp,
     required UserLogin userLogin,
     required CurrentUser currentUser,
+    required AppUserCubit appUserCubit,
   }) : _userSignUp = userSignUp,
        _userLogin = userLogin,
        _currentUser = currentUser,
+       _appUserCubit = appUserCubit,
        super(AuthBlocInitial()) {
     on<AuthSignUp>(_onSignUp);
     on<AuthLogin>(_onLogin);
@@ -40,7 +44,7 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
     res.fold(
       (failure) => emit(AuthFailureState(failure.message)),
-      (user) => emit(AuthSuccessState(user)),
+      (user) => _emitAuthSuccess(user, emit),
     );
   }
 
@@ -53,7 +57,7 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
     res.fold(
       (failure) => emit(AuthFailureState(failure.message)),
-      (user) => emit(AuthSuccessState(user)),
+      (user) => _emitAuthSuccess(user, emit),
     );
   }
 
@@ -74,8 +78,16 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
       },
       (user) {
         print('Current User: ${user.email}');
-        emit(AuthSuccessState(user));
+        _emitAuthSuccess(user, emit);
       },
     );
+  }
+
+  //to update app user cubit and emit success state
+  //to get user's auth state to core layer for share the state with the common
+  //
+  void _emitAuthSuccess(User user, Emitter<AuthBlocState> emit) {
+    _appUserCubit.updateUser(user);
+    emit(AuthSuccessState(user));
   }
 }

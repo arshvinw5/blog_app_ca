@@ -71,7 +71,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw ServerException('Signin failed');
       }
 
-      return UserModel.fromJson(response.user!.toJson());
+      return UserModel.fromJson(
+        response.user!.toJson(),
+      ).copyWith(email: currentSession!.user.email);
     } on AuthException catch (e) {
       throw ServerException(e.message);
     } catch (e) {
