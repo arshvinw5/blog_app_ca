@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 class BlogEditor extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
+  final int minLines;
   const BlogEditor({
     super.key,
     required this.controller,
     required this.hintText,
+    this.minLines = 1,
   });
 
   @override
@@ -46,6 +48,7 @@ class _BlogEditorState extends State<BlogEditor> {
         ),
         border: OutlineInputBorder(),
       ),
+      minLines: widget.minLines,
       maxLines: null,
     );
   }

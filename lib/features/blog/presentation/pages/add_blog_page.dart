@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:ca_blog_app/core/utils/pick_image.dart';
 import 'package:ca_blog_app/features/blog/presentation/widgets/blog_editor.dart';
+import 'package:ca_blog_app/features/blog/presentation/widgets/blog_gradient_button.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,12 @@ class _AddBlogPageState extends State<AddBlogPage> {
     }
   }
 
+  void _removeImage() {
+    setState(() {
+      imageFile = null;
+    });
+  }
+
   @override
   void dispose() {
     titleController.dispose();
@@ -47,35 +54,74 @@ class _AddBlogPageState extends State<AddBlogPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Add Blog Page'),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.save))],
-      ),
+      appBar: AppBar(centerTitle: true, title: const Text('Add Blog Page')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              _dottedBorder(selectImage),
+              imageFile != null ? _imagePicker() : _dottedBorder(selectImage),
               const SizedBox(height: 20),
               _categoryChip(selectedChips, () {
                 setState(() {});
               }),
               const SizedBox(height: 20),
-              BlogEditor(
-                controller: titleController,
-                hintText: 'Enter blog title',
-              ),
+              BlogEditor(controller: titleController, hintText: 'Blog title'),
               const SizedBox(height: 20),
               BlogEditor(
                 controller: contentController,
-                hintText: 'Enter blog content',
+                hintText: 'Blog content',
+                minLines: 5,
               ),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          child: BlogGradientButton(
+            buttonText: 'Save Blog',
+            onTap: () {
+              // Add save blog logic here
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _imagePicker() {
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: selectImage,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.file(
+              imageFile!,
+              height: 300,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 8,
+          right: 8,
+          child: GestureDetector(
+            onTap: _removeImage,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: const BoxDecoration(
+                color: Colors.black54,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.delete, color: Colors.white, size: 20),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -91,7 +137,7 @@ Widget _dottedBorder(VoidCallback onTap) {
         radius: const Radius.circular(12),
       ),
       child: Container(
-        height: 150,
+        height: 300,
         width: double.infinity,
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
