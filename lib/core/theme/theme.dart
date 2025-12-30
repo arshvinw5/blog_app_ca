@@ -15,6 +15,13 @@ class AppTheme {
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.white),
     ),
+    drawerTheme: const DrawerThemeData(
+      backgroundColor: AppPallete.backgroundColor,
+    ),
+    chipTheme: ChipThemeData(
+      backgroundColor: AppPallete.backgroundColor,
+      side: BorderSide.none,
+    ),
 
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: const EdgeInsets.all(20),
