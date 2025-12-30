@@ -1,4 +1,4 @@
-import 'package:ca_blog_app/core/theme/app_pallete.dart';
+import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +42,7 @@ class _BlogEditorState extends State<BlogEditor> {
       decoration: InputDecoration(
         labelText: widget.hintText,
         labelStyle: TextStyle(
-          color: _isFocused ? AppPallete.gradient2 : Colors.grey,
+          color: _isFocused ? AppPalette.gradient2 : Colors.grey,
         ),
         border: OutlineInputBorder(),
       ),

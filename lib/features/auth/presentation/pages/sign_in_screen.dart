@@ -1,5 +1,5 @@
 import 'package:ca_blog_app/core/common/widgets/loader.dart';
-import 'package:ca_blog_app/core/theme/app_pallete.dart';
+import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:ca_blog_app/core/utils/show_snackbar.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:ca_blog_app/features/auth/presentation/pages/sign_up_screen.dart';
@@ -41,8 +41,8 @@ class _SignInScreenState extends State<SignInScreen> {
               showSnackBar(
                 context,
                 state.message,
-                textColor: AppPallete.textColor,
-                backgroundColor: AppPallete.errorColor,
+                textColor: AppPalette.textColor,
+                backgroundColor: AppPalette.errorColor,
                 fontSize: 15.0,
               );
             } else if (state is AuthSuccessState) {
@@ -119,7 +119,7 @@ class _SignInScreenState extends State<SignInScreen> {
             TextSpan(
               text: " Sign Up",
               style: TextStyle(
-                color: AppPallete.gradient2,
+                color: AppPalette.gradient2,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),

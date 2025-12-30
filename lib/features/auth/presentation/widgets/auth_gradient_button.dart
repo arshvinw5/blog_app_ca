@@ -1,4 +1,4 @@
-import 'package:ca_blog_app/core/theme/app_pallete.dart';
+import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:flutter/material.dart';
 
 class AuthGradientButton extends StatefulWidget {
@@ -21,9 +21,9 @@ class _AuthGradientButtonState extends State<AuthGradientButton> {
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
-            AppPallete.gradient1,
-            AppPallete.gradient2,
-            AppPallete.gradient3,
+            AppPalette.gradient1,
+            AppPalette.gradient2,
+            AppPalette.gradient3,
           ],
           begin: Alignment.bottomLeft,
           end: Alignment.topRight,
@@ -35,8 +35,8 @@ class _AuthGradientButtonState extends State<AuthGradientButton> {
 
         style: ElevatedButton.styleFrom(
           fixedSize: Size(395, 55),
-          backgroundColor: AppPallete.transparentColor,
-          shadowColor: AppPallete.transparentColor,
+          backgroundColor: AppPalette.transparentColor,
+          shadowColor: AppPalette.transparentColor,
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
