@@ -1,4 +1,3 @@
-import 'package:ca_blog_app/core/common/widgets/loader.dart';
 import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:ca_blog_app/core/utils/show_snackbar.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
@@ -50,10 +49,6 @@ class _SignInScreenState extends State<SignInScreen> {
             }
           },
           builder: (context, state) {
-            if (state is AuthLoadingState) {
-              return const Loader();
-            }
-
             return Form(
               key: _formKey,
               child: Column(
@@ -74,6 +69,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   const SizedBox(height: 30),
                   AuthGradientButton(
                     buttonText: "Sign In",
+                    isLoading: state is AuthLoadingState,
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
                         context.read<AuthBlocBloc>().add(
