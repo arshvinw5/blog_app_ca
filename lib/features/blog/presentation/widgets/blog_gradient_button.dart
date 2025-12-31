@@ -1,20 +1,20 @@
 import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:flutter/material.dart';
 
-class AuthGradientButton extends StatefulWidget {
+class BlogGradientButton extends StatefulWidget {
   final String buttonText;
   final VoidCallback onTap;
-  const AuthGradientButton({
+  const BlogGradientButton({
     super.key,
     required this.buttonText,
     required this.onTap,
   });
 
   @override
-  State<AuthGradientButton> createState() => _AuthGradientButtonState();
+  State<BlogGradientButton> createState() => _BlogGradientButtonState();
 }
 
-class _AuthGradientButtonState extends State<AuthGradientButton> {
+class _BlogGradientButtonState extends State<BlogGradientButton> {
   @override
   Widget build(BuildContext context) {
     return Container(

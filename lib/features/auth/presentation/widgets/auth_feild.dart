@@ -1,4 +1,4 @@
-import 'package:ca_blog_app/core/theme/app_pallete.dart';
+import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatefulWidget {
@@ -46,14 +46,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       decoration: InputDecoration(
         labelText: widget.hintText,
         labelStyle: TextStyle(
-          color: _isFocused ? AppPallete.gradient2 : Colors.grey,
+          color: _isFocused ? AppPalette.gradient2 : Colors.grey,
         ),
         border: OutlineInputBorder(),
         suffixIcon: widget.isObscureText && _isFocused
             ? IconButton(
                 icon: Icon(
                   _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: _isFocused ? AppPallete.gradient2 : Colors.grey,
+                  color: _isFocused ? AppPalette.gradient2 : Colors.grey,
                 ),
                 onPressed: () {
                   setState(() {

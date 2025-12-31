@@ -1,5 +1,6 @@
-import 'package:ca_blog_app/core/theme/app_pallete.dart';
+import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
+import 'package:ca_blog_app/features/blog/presentation/pages/add_blog_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,9 +19,9 @@ class BlogPage extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppPallete.gradient1,
-                    AppPallete.gradient2,
-                    AppPallete.gradient3,
+                    AppPalette.gradient1,
+                    AppPalette.gradient2,
+                    AppPalette.gradient3,
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -57,7 +58,7 @@ class BlogPage extends StatelessWidget {
           IconButton(
             icon: const Icon(CupertinoIcons.add_circled),
             onPressed: () {
-              // Implement refresh functionality here
+              Navigator.push(context, AddBlogPage.route());
             },
           ),
         ],
