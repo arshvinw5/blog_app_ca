@@ -31,6 +31,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
   //to image picker fn
   void selectImage() async {
     final pickedImage = await pickImageFromGallery();
+
     if (pickedImage != null) {
       setState(() {
         imageFile = pickedImage;
