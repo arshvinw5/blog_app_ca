@@ -1,5 +1,4 @@
 import 'package:ca_blog_app/core/theme/app_palette.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BlogEditor extends StatefulWidget {

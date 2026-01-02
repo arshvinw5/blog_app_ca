@@ -5,7 +5,6 @@ import 'package:ca_blog_app/core/utils/pick_image.dart';
 import 'package:ca_blog_app/features/blog/presentation/widgets/blog_editor.dart';
 import 'package:ca_blog_app/features/blog/presentation/widgets/blog_gradient_button.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AddBlogPage extends StatefulWidget {
@@ -137,7 +136,7 @@ Widget _dottedBorder(VoidCallback onTap) {
         color: AppPalette.borderColor,
         radius: const Radius.circular(12),
       ),
-      child: Container(
+      child: SizedBox(
         height: 300,
         width: double.infinity,
         child: const Column(

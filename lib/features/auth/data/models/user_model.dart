@@ -3,6 +3,10 @@ import 'package:ca_blog_app/core/common/entities/user.dart';
 class UserModel extends User {
   UserModel({required super.id, required super.email, required super.name});
 
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{'email': email, 'name': name};
+  }
+
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'] ?? '',

@@ -1,20 +1,19 @@
+import 'package:ca_blog_app/core/common/widgets/loader.dart';
 import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:flutter/material.dart';
 
-class AuthGradientButton extends StatefulWidget {
+class AuthGradientButton extends StatelessWidget {
   final String buttonText;
   final VoidCallback onTap;
+  final bool isLoading;
+
   const AuthGradientButton({
     super.key,
     required this.buttonText,
     required this.onTap,
+    this.isLoading = false,
   });
 
-  @override
-  State<AuthGradientButton> createState() => _AuthGradientButtonState();
-}
-
-class _AuthGradientButtonState extends State<AuthGradientButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,23 +30,24 @@ class _AuthGradientButtonState extends State<AuthGradientButton> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: ElevatedButton(
-        onPressed: widget.onTap,
-
+        onPressed: isLoading ? null : onTap,
         style: ElevatedButton.styleFrom(
-          fixedSize: Size(395, 55),
+          fixedSize: const Size(395, 55),
           backgroundColor: AppPalette.transparentColor,
           shadowColor: AppPalette.transparentColor,
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        child: Text(
-          widget.buttonText,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
+        child: isLoading
+            ? const SizedBox(height: 20, width: 20, child: Loader())
+            : Text(
+                buttonText,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
       ),
     );
   }
