@@ -1,11 +1,16 @@
 import 'dart:io';
 
+import 'package:ca_blog_app/core/cubits/cubit/app_user_cubit.dart';
 import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:ca_blog_app/core/utils/pick_image.dart';
+import 'package:ca_blog_app/core/utils/show_snackbar.dart';
+import 'package:ca_blog_app/features/blog/presentation/bloc/blog_bloc.dart';
+import 'package:ca_blog_app/features/blog/presentation/pages/blog_page.dart';
 import 'package:ca_blog_app/features/blog/presentation/widgets/blog_editor.dart';
 import 'package:ca_blog_app/features/blog/presentation/widgets/blog_gradient_button.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddBlogPage extends StatefulWidget {
   static MaterialPageRoute<dynamic> route() =>
@@ -20,6 +25,9 @@ class AddBlogPage extends StatefulWidget {
 class _AddBlogPageState extends State<AddBlogPage> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+
+  //form key
+  final formKey = GlobalKey<FormState>();
 
   //array for get the values of chips
   List<String> selectedChips = [];
@@ -51,40 +59,90 @@ class _AddBlogPageState extends State<AddBlogPage> {
     super.dispose();
   }
 
+  //fn to upload the blog
+  void _uploadBlog() {
+    // you can use isNotEmpty instead of length >= 1
+    if (formKey.currentState!.validate() &&
+        selectedChips.isNotEmpty &&
+        imageFile != null) {
+      //to get the postedId from user bloc
+      final postedId =
+          (context.read<AppUserCubit>().state as AppLoggedInState).user.id;
+      context.read<BlogBloc>().add(
+        UploadBlogEvent(
+          posterId: postedId,
+          title: titleController.text.trim(),
+          content: contentController.text.trim(),
+          categories: selectedChips,
+          imageFile: imageFile!,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: const Text('Add Blog Page')),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              imageFile != null ? _imagePicker() : _dottedBorder(selectImage),
-              const SizedBox(height: 20),
-              _categoryChip(selectedChips, () {
-                setState(() {});
-              }),
-              const SizedBox(height: 20),
-              BlogEditor(controller: titleController, hintText: 'Blog title'),
-              const SizedBox(height: 20),
-              BlogEditor(
-                controller: contentController,
-                hintText: 'Blog content',
-                minLines: 5,
+      body: BlocConsumer<BlogBloc, BlogState>(
+        listener: (context, state) {
+          if (state is BlogFailure) {
+            showSnackBar(context, state.message);
+          } else if (state is BlogUploadSuccess) {
+            //have to add snackbar
+            showSnackBar(
+              context,
+              'Blog uploaded successfully',
+              backgroundColor: AppPalette.gradient3,
+            );
+            Navigator.pushAndRemoveUntil(
+              context,
+              BlogPage.route(),
+              (route) => false,
+            );
+          }
+        },
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    imageFile != null
+                        ? _imagePicker()
+                        : _dottedBorder(selectImage),
+                    const SizedBox(height: 20),
+                    _categoryChip(selectedChips, () {
+                      setState(() {});
+                    }),
+                    const SizedBox(height: 20),
+                    BlogEditor(
+                      controller: titleController,
+                      hintText: 'Blog title',
+                      validator: 'Blog title is required',
+                    ),
+                    const SizedBox(height: 20),
+                    BlogEditor(
+                      controller: contentController,
+                      hintText: 'Blog content',
+                      minLines: 5,
+                      validator: 'Blog content is required',
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
           child: BlogGradientButton(
             buttonText: 'Save Blog',
-            onTap: () {
-              // Add save blog logic here
-            },
+            onTap: _uploadBlog,
           ),
         ),
       ),
