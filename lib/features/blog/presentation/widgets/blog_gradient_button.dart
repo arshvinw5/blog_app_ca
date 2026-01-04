@@ -1,13 +1,16 @@
+import 'package:ca_blog_app/core/common/widgets/loader.dart';
 import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:flutter/material.dart';
 
 class BlogGradientButton extends StatefulWidget {
   final String buttonText;
   final VoidCallback onTap;
+  final bool? isLoading;
   const BlogGradientButton({
     super.key,
     required this.buttonText,
     required this.onTap,
+    this.isLoading,
   });
 
   @override
@@ -40,14 +43,16 @@ class _BlogGradientButtonState extends State<BlogGradientButton> {
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        child: Text(
-          widget.buttonText,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
+        child: widget.isLoading == true
+            ? const SizedBox(height: 20, width: 20, child: Loader())
+            : Text(
+                widget.buttonText,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
       ),
     );
   }

@@ -1,16 +1,17 @@
 import 'package:ca_blog_app/core/theme/app_palette.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BlogEditor extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final int minLines;
+  final String validator;
   const BlogEditor({
     super.key,
     required this.controller,
     required this.hintText,
     this.minLines = 1,
+    required this.validator,
   });
 
   @override
@@ -46,10 +47,18 @@ class _BlogEditorState extends State<BlogEditor> {
         labelStyle: TextStyle(
           color: _isFocused ? AppPalette.gradient2 : Colors.grey,
         ),
+        errorStyle: TextStyle(color: AppPalette.errorColor),
+
         border: OutlineInputBorder(),
       ),
       minLines: widget.minLines,
       maxLines: null,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return widget.validator;
+        }
+        return null;
+      },
     );
   }
 }

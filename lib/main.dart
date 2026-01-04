@@ -1,6 +1,7 @@
 import 'package:ca_blog_app/core/cubits/cubit/app_user_cubit.dart';
 import 'package:ca_blog_app/core/theme/theme.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
+import 'package:ca_blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:ca_blog_app/home.dart';
 import 'package:ca_blog_app/init_dependencies.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ void main() async {
         BlocProvider<AuthBlocBloc>(
           create: (_) => serviceLocator<AuthBlocBloc>(),
         ),
+        BlocProvider<BlogBloc>(create: (_) => serviceLocator<BlogBloc>()),
       ],
       child: const MyApp(),
     ),
