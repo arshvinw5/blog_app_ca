@@ -13,5 +13,5 @@ abstract interface class BlogRepository {
     required List<String> categories,
   });
 
-  Future<Either<Failures, List<Blog>>> fetchAllBlogs();
+  Future<Either<Failures, List<Blog>>> fetchAllBlogsRepo();
 }

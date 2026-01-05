@@ -15,7 +15,7 @@ abstract interface class BlogRemoteDataSource {
   });
 
   //to fetch all the blogs from supabase
-  Future<List<BlogModel>> fetchAllBlogs();
+  Future<List<BlogModel>> fetchAllBlogsDb();
 }
 
 class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
@@ -65,7 +65,7 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
   }
 
   @override
-  Future<List<BlogModel>> fetchAllBlogs() async {
+  Future<List<BlogModel>> fetchAllBlogsDb() async {
     try {
       //join profiles table to get the user name
       return await supabaseClient
