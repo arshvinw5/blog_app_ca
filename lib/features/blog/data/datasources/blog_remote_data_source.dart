@@ -74,9 +74,10 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
           .then(
             (blogs) => blogs
                 .map(
+                  // to convert map to BlogModel
                   (blog) => BlogModel.fromMap(
                     blog,
-                  ).copyWith(posterName: blog['profiles']['name']),
+                  ).copyWith(postedUser: blog['profiles']['name']),
                 )
                 .toList(),
           );
