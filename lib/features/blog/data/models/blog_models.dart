@@ -31,6 +31,8 @@ class BlogModel extends Blog {
     );
   }
 
+  //no need to store postedUser in the database
+  //that's why it's not included in toMap method
   Map<String, dynamic> toMap() {
     return {
       'id': id,

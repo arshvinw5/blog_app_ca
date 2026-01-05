@@ -54,4 +54,16 @@ class BlogRepositoryImpl implements BlogRepository {
       return Left(Failures(e.message));
     }
   }
+
+  //to fetch all the blogs from supabase
+  @override
+  Future<Either<Failures, List<Blog>>> fetchAllBlogs() async {
+    try {
+      return await remoteDataSource.fetchAllBlogs().then(
+        (blogModels) => Right(blogModels),
+      );
+    } on ServerException catch (e) {
+      return Left(Failures(e.message));
+    }
+  }
 }
