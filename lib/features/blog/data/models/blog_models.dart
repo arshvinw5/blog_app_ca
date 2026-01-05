@@ -9,6 +9,7 @@ class BlogModel extends Blog {
     super.imageUrl,
     required super.categories,
     super.updatedAt,
+    super.posterName,
   });
 
   //this reason to handle null :
@@ -53,6 +54,7 @@ class BlogModel extends Blog {
     String? imageUrl,
     List<String>? categories,
     DateTime? updatedAt,
+    String? posterName,
   }) {
     return BlogModel(
       id: id ?? this.id,
@@ -62,6 +64,7 @@ class BlogModel extends Blog {
       imageUrl: imageUrl ?? this.imageUrl,
       categories: categories ?? this.categories,
       updatedAt: updatedAt ?? this.updatedAt,
+      posterName: posterName ?? this.posterName,
     );
   }
 }
