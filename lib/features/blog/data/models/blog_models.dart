@@ -6,37 +6,44 @@ class BlogModel extends Blog {
     required super.posterId,
     required super.title,
     required super.content,
-    required super.imageUrl,
+    super.imageUrl,
     required super.categories,
-    required super.updatedAt,
+    super.updatedAt,
   });
 
-  //if we are having error then change the column name with "topics"
+  //this reason to handle null :
+  //mage_url text,        -- Can be NULL
+  //updated_at timestamp,  -- Can be NULL
+  //Supabase
+
+  factory BlogModel.fromMap(Map<String, dynamic> map) {
+    return BlogModel(
+      id: map['id'] as String,
+      posterId: map['poster_id'] as String,
+      title: map['title'] as String,
+      content: map['content'] as String,
+      imageUrl: map['image_url'] as String?, // Handle null
+      categories: List<String>.from(map['topics'] ?? []), // Handle null array
+      updatedAt: map['updated_at'] != null
+          ? DateTime.parse(map['updated_at'])
+          : null, // Handle null date
+    );
+  }
+
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'id': id,
       'poster_id': posterId,
       'title': title,
       'content': content,
       'image_url': imageUrl,
       'topics': categories,
-      'updated_at': updatedAt.millisecondsSinceEpoch,
+      'updated_at': updatedAt?.toIso8601String(),
     };
   }
 
-  factory BlogModel.fromMap(Map<String, dynamic> map) {
-    return BlogModel(
-      id: map['id'] as String,
-      posterId: map['posterId'] as String,
-      title: map['title'] as String,
-      content: map['content'] as String,
-      imageUrl: map['image_url'] as String,
-      categories: List<String>.from(map['topics'] ?? []),
-      updatedAt: map['updated_at'] != null
-          ? DateTime.now()
-          : DateTime.parse(map['updated_at'] as String),
-    );
-  }
+  //CopyWith method has been created for easy modification of BlogModel instances since they are immutable.
+  //can't modify the existing instance, but can create a new instance with modified fields.
 
   BlogModel copyWith({
     String? id,

@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignUpScreen extends StatefulWidget {
   static MaterialPageRoute<dynamic> route() =>
-      MaterialPageRoute(builder: (context) => const SignInScreen());
+      MaterialPageRoute(builder: (context) => const SignUpScreen());
 
   const SignUpScreen({super.key});
 
@@ -46,6 +46,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 fontSize: 15.0,
                 backgroundColor: AppPalette.errorColor,
                 textColor: AppPalette.textColor,
+              );
+            } else if (state is AuthSuccessState) {
+              showSnackBar(
+                context,
+                "Sign Up Successful & Please confirm your email before logging in.",
+                backgroundColor: AppPalette.gradient3,
+                textColor: AppPalette.textColor,
+                fontSize: 15.0,
+              );
+              Navigator.pushAndRemoveUntil(
+                context,
+                SignInScreen.route(),
+                (route) => false,
               );
             }
           },
@@ -113,7 +126,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget _richText() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, SignUpScreen.route());
+        Navigator.push(context, SignInScreen.route());
       },
       child: RichText(
         text: TextSpan(

@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignInScreen extends StatefulWidget {
   static MaterialPageRoute<dynamic> route() =>
-      MaterialPageRoute(builder: (context) => const SignUpScreen());
+      MaterialPageRoute(builder: (context) => const SignInScreen());
 
   const SignInScreen({super.key});
 
@@ -105,7 +105,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget _richText() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, SignInScreen.route());
+        Navigator.push(context, SignUpScreen.route());
       },
       child: RichText(
         text: TextSpan(

@@ -42,7 +42,7 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
     try {
       //to upload image to supabase storage
       await supabaseClient.storage
-          .from('blog_images')
+          .from('blogs_images')
           .upload(blog.id, imageFile);
 
       //to advance =>
@@ -52,7 +52,7 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
       //${blog.id}-> folder name
 
       //to retrieve the public url of the image
-      return supabaseClient.storage.from('blog_images').getPublicUrl(blog.id);
+      return supabaseClient.storage.from('blogs_images').getPublicUrl(blog.id);
     } catch (e) {
       throw ServerException(e.toString());
     }

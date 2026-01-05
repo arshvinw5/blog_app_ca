@@ -4,17 +4,17 @@ class Blog {
   final String posterId;
   final String title;
   final String content;
-  final String imageUrl;
+  final String? imageUrl;
   final List<String> categories;
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
 
   Blog({
     required this.id,
     required this.posterId,
     required this.title,
     required this.content,
-    required this.imageUrl,
+    this.imageUrl,
     required this.categories,
-    required this.updatedAt,
+    this.updatedAt,
   });
 }

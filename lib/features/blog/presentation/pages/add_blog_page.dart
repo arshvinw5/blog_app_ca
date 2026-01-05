@@ -137,14 +137,22 @@ class _AddBlogPageState extends State<AddBlogPage> {
           );
         },
       ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-          child: BlogGradientButton(
-            buttonText: 'Save Blog',
-            onTap: _uploadBlog,
-          ),
-        ),
+      bottomNavigationBar: BlocBuilder<BlogBloc, BlogState>(
+        builder: (context, state) {
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 16.0,
+              ),
+              child: BlogGradientButton(
+                isLoading: state is BlogLoading,
+                buttonText: 'Save Blog',
+                onTap: _uploadBlog,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
