@@ -5,11 +5,17 @@ import 'package:ca_blog_app/features/blog/data/models/blog_models.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class BlogRemoteDataSource {
+  //upload blog to supabase
   Future<BlogModel> uploadBlog(BlogModel blog);
+
+  //to upload image to supabase bucket storage
   Future<String> uploadImage({
     required File imageFile,
     required BlogModel blog,
   });
+
+  //to fetch all the blogs from supabase
+  Future<List<BlogModel>> fetchAllBlogsDb();
 }
 
 class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
@@ -53,6 +59,28 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
 
       //to retrieve the public url of the image
       return supabaseClient.storage.from('blogs_images').getPublicUrl(blog.id);
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<List<BlogModel>> fetchAllBlogsDb() async {
+    try {
+      //join profiles table to get the user name
+      return await supabaseClient
+          .from('blogs')
+          .select('*,profiles(name)') // to join profiles table's name column
+          .then(
+            (blogs) => blogs
+                .map(
+                  // to convert map to BlogModel
+                  (blog) => BlogModel.fromMap(
+                    blog,
+                  ).copyWith(postedUser: blog['profiles']['name']),
+                )
+                .toList(),
+          );
     } catch (e) {
       throw ServerException(e.toString());
     }

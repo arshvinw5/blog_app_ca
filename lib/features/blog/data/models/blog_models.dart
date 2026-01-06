@@ -9,6 +9,7 @@ class BlogModel extends Blog {
     super.imageUrl,
     required super.categories,
     super.updatedAt,
+    super.postedUser,
   });
 
   //this reason to handle null :
@@ -30,6 +31,8 @@ class BlogModel extends Blog {
     );
   }
 
+  //no need to store postedUser in the database
+  //that's why it's not included in toMap method
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -53,6 +56,7 @@ class BlogModel extends Blog {
     String? imageUrl,
     List<String>? categories,
     DateTime? updatedAt,
+    String? postedUser,
   }) {
     return BlogModel(
       id: id ?? this.id,
@@ -62,6 +66,7 @@ class BlogModel extends Blog {
       imageUrl: imageUrl ?? this.imageUrl,
       categories: categories ?? this.categories,
       updatedAt: updatedAt ?? this.updatedAt,
+      postedUser: postedUser ?? this.postedUser,
     );
   }
 }
