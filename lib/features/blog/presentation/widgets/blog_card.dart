@@ -16,7 +16,7 @@ class BlogCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, BlogViewScreen.route(blog.title));
+        Navigator.push(context, BlogViewScreen.route(blog));
       },
       child: Container(
         height: 200,
