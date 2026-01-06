@@ -6,6 +6,7 @@ import 'package:ca_blog_app/core/utils/pick_image.dart';
 import 'package:ca_blog_app/core/utils/show_snackbar.dart';
 import 'package:ca_blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:ca_blog_app/features/blog/presentation/pages/blog_page.dart';
+import 'package:ca_blog_app/features/blog/presentation/widgets/blog_chips.dart';
 import 'package:ca_blog_app/features/blog/presentation/widgets/blog_editor.dart';
 import 'package:ca_blog_app/features/blog/presentation/widgets/blog_gradient_button.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -114,9 +115,12 @@ class _AddBlogPageState extends State<AddBlogPage> {
                         ? _imagePicker()
                         : _dottedBorder(selectImage),
                     const SizedBox(height: 20),
-                    _categoryChip(selectedChips, () {
-                      setState(() {});
-                    }),
+                    BlogChips(
+                      selectedChips: selectedChips,
+                      onUpdate: () {
+                        setState(() {});
+                      },
+                    ),
                     const SizedBox(height: 20),
                     BlogEditor(
                       controller: titleController,
@@ -221,36 +225,36 @@ Widget _dottedBorder(VoidCallback onTap) {
   );
 }
 
-Widget _categoryChip(List<String> selectedChips, VoidCallback onUpdate) {
-  return SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: Row(
-      children: ['Technology', 'Health', 'Travel', 'Education', 'Food']
-          .map(
-            (category) => Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: GestureDetector(
-                onTap: () {
-                  if (selectedChips.contains(category)) {
-                    selectedChips.remove(category);
-                  } else {
-                    selectedChips.add(category);
-                  }
-                  onUpdate();
-                },
-                child: Chip(
-                  label: Text(category),
-                  color: selectedChips.contains(category)
-                      ? const WidgetStatePropertyAll(AppPalette.gradient1)
-                      : null,
-                  side: selectedChips.contains(category)
-                      ? null
-                      : const BorderSide(color: AppPalette.borderColor),
-                ),
-              ),
-            ),
-          )
-          .toList(),
-    ),
-  );
-}
+// Widget _categoryChip(List<String> selectedChips, VoidCallback onUpdate) {
+//   return SingleChildScrollView(
+//     scrollDirection: Axis.horizontal,
+//     child: Row(
+//       children: ['Technology', 'Health', 'Travel', 'Education', 'Food']
+//           .map(
+//             (category) => Padding(
+//               padding: const EdgeInsets.only(right: 10.0),
+//               child: GestureDetector(
+//                 onTap: () {
+//                   if (selectedChips.contains(category)) {
+//                     selectedChips.remove(category);
+//                   } else {
+//                     selectedChips.add(category);
+//                   }
+//                   onUpdate();
+//                 },
+//                 child: Chip(
+//                   label: Text(category),
+//                   color: selectedChips.contains(category)
+//                       ? const WidgetStatePropertyAll(AppPalette.gradient1)
+//                       : null,
+//                   side: selectedChips.contains(category)
+//                       ? null
+//                       : const BorderSide(color: AppPalette.borderColor),
+//                 ),
+//               ),
+//             ),
+//           )
+//           .toList(),
+//     ),
+//   );
+// }

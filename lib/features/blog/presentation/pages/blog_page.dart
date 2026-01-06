@@ -4,6 +4,7 @@ import 'package:ca_blog_app/core/utils/show_snackbar.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:ca_blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:ca_blog_app/features/blog/presentation/pages/add_blog_page.dart';
+import 'package:ca_blog_app/features/blog/presentation/widgets/blog_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,10 +47,7 @@ class _BlogPageState extends State<BlogPage> {
               itemCount: blogs.length,
               itemBuilder: (context, index) {
                 final blog = blogs[index];
-                return ListTile(
-                  title: Text(blog.title),
-                  subtitle: Text(blog.content),
-                );
+                return BlogCard(blog: blog, color: AppPalette.gradient1);
               },
             );
           } else {
