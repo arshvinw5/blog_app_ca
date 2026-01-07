@@ -64,6 +64,7 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     );
   }
 
+  //to get the current user event
   Future<void> _onGetCurrentUser(
     AuthGetCurrentUser event,
     Emitter<AuthBlocState> emit,

@@ -111,8 +111,29 @@ class _BlogPageState extends State<BlogPage> {
           ListTile(leading: Icon(Icons.settings), title: Text('Settings')),
           GestureDetector(
             onTap: () {
-              // Trigger logout event
-              context.read<AuthBlocBloc>().add(AuthLogout());
+              showDialog(
+                context: context,
+                builder: (dialogContext) => AlertDialog(
+                  title: Text('Logout'),
+                  content: Text('Are you sure you want to logout?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(dialogContext).pop(); // Dismiss dialog
+                      },
+                      child: Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(dialogContext).pop(); // Dismiss dialog
+                        // Trigger logout event
+                        context.read<AuthBlocBloc>().add(AuthLogout());
+                      },
+                      child: Text('Logout'),
+                    ),
+                  ],
+                ),
+              );
             },
             child: ListTile(
               leading: Icon(Icons.logout_outlined),
