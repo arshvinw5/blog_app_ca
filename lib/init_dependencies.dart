@@ -9,6 +9,7 @@ import 'package:ca_blog_app/features/auth/domain/usecases/auth_signout.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_signup.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
+import 'package:ca_blog_app/features/blog/data/datasources/blog_local_data_source.dart';
 import 'package:ca_blog_app/features/blog/data/datasources/blog_remote_data_source.dart';
 import 'package:ca_blog_app/features/blog/data/repositories/blog_repository_impl.dart';
 import 'package:ca_blog_app/features/blog/domain/repositories/blog_repository.dart';
@@ -16,7 +17,9 @@ import 'package:ca_blog_app/features/blog/domain/usecases/fetch_blogs.dart';
 import 'package:ca_blog_app/features/blog/domain/usecases/upload_blogs.dart';
 import 'package:ca_blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final serviceLocator = GetIt.instance;
@@ -28,6 +31,12 @@ Future<void> initDependancies() async {
     url: AppSecretes.supabaseUrl,
     anonKey: AppSecretes.supabaseAnonKey,
   );
+
+  //initialize hive and open box
+  Hive.defaultDirectory = (await getApplicationDocumentsDirectory()).path;
+
+  //register open box for blogs
+  serviceLocator.registerLazySingleton<Box>(() => Hive.box(name: 'blogs'));
 
   //register Supabase client
   serviceLocator.registerLazySingleton<SupabaseClient>(() => supabase.client);
@@ -98,10 +107,15 @@ void _initBlog() {
         supabaseClient: serviceLocator<SupabaseClient>(),
       ),
     )
+    ..registerFactory<BlogLocalDataSource>(
+      () => BlogLocalDataSourceImpl(serviceLocator<Box>()),
+    )
     //blog repository
     ..registerFactory<BlogRepository>(
       () => BlogRepositoryImpl(
         remoteDataSource: serviceLocator<BlogRemoteDataSource>(),
+        localDataSource: serviceLocator<BlogLocalDataSource>(),
+        connectionChecker: serviceLocator<ConnectionChecker>(),
       ),
     )
     //usecase upload blogs

@@ -69,8 +69,10 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failures, User>> getCurrentUserProfile() async {
     try {
       //to check internet connection before making api call to fetch user profile
+      //not connected to internet
       if (!await (connectionChecker.isConnected)) {
-        //purpose of this is not to log the user when the internet is available
+        //purpose of this is to log the user when the internet is not available
+        //then save it in local db for offline access
         final session = remoteDataSource.currentSession;
 
         //if the session is null then return no internet connection failure
