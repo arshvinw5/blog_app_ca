@@ -1,4 +1,5 @@
 import 'package:ca_blog_app/core/cubits/cubit/app_user_cubit.dart';
+import 'package:ca_blog_app/core/network/connection_checker.dart';
 import 'package:ca_blog_app/core/secrets/app_secretes.dart';
 import 'package:ca_blog_app/features/auth/data/datasource/auth_remote_data_source.dart';
 import 'package:ca_blog_app/features/auth/data/repository/auth_repository_impl.dart';
@@ -8,6 +9,7 @@ import 'package:ca_blog_app/features/auth/domain/usecases/auth_signout.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_signup.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
+import 'package:ca_blog_app/features/blog/data/datasources/blog_local_data_source.dart';
 import 'package:ca_blog_app/features/blog/data/datasources/blog_remote_data_source.dart';
 import 'package:ca_blog_app/features/blog/data/repositories/blog_repository_impl.dart';
 import 'package:ca_blog_app/features/blog/domain/repositories/blog_repository.dart';
@@ -15,6 +17,9 @@ import 'package:ca_blog_app/features/blog/domain/usecases/fetch_blogs.dart';
 import 'package:ca_blog_app/features/blog/domain/usecases/upload_blogs.dart';
 import 'package:ca_blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final serviceLocator = GetIt.instance;
@@ -27,11 +32,26 @@ Future<void> initDependancies() async {
     anonKey: AppSecretes.supabaseAnonKey,
   );
 
+  //initialize hive and open box
+  Hive.defaultDirectory = (await getApplicationDocumentsDirectory()).path;
+
+  //register open box for blogs
+  serviceLocator.registerLazySingleton<Box>(() => Hive.box(name: 'blogs'));
+
   //register Supabase client
   serviceLocator.registerLazySingleton<SupabaseClient>(() => supabase.client);
 
   //register AppUserCubit
   serviceLocator.registerLazySingleton<AppUserCubit>(() => AppUserCubit());
+
+  serviceLocator.registerFactory(
+    () => InternetConnectionChecker.createInstance(),
+  );
+
+  //to register ConnectionChecker
+  serviceLocator.registerFactory<ConnectionChecker>(
+    () => ConnectionCheckerImpl(serviceLocator<InternetConnectionChecker>()),
+  );
 }
 
 void _initAuth() {
@@ -44,7 +64,10 @@ void _initAuth() {
     )
     //auth repository
     ..registerFactory<AuthRepository>(
-      () => AuthRepositoryImpl(serviceLocator<AuthRemoteDataSource>()),
+      () => AuthRepositoryImpl(
+        serviceLocator<AuthRemoteDataSource>(),
+        serviceLocator<ConnectionChecker>(),
+      ),
     )
     //usecase signup
     ..registerFactory<UserSignUp>(
@@ -84,10 +107,15 @@ void _initBlog() {
         supabaseClient: serviceLocator<SupabaseClient>(),
       ),
     )
+    ..registerFactory<BlogLocalDataSource>(
+      () => BlogLocalDataSourceImpl(serviceLocator<Box>()),
+    )
     //blog repository
     ..registerFactory<BlogRepository>(
       () => BlogRepositoryImpl(
         remoteDataSource: serviceLocator<BlogRemoteDataSource>(),
+        localDataSource: serviceLocator<BlogLocalDataSource>(),
+        connectionChecker: serviceLocator<ConnectionChecker>(),
       ),
     )
     //usecase upload blogs

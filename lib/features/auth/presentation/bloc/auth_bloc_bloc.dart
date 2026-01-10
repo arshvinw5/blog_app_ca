@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:ca_blog_app/core/cubits/cubit/app_user_cubit.dart';
 import 'package:ca_blog_app/core/usecase/usecase.dart';
 import 'package:ca_blog_app/core/common/entities/user.dart';
@@ -7,6 +6,7 @@ import 'package:ca_blog_app/features/auth/domain/usecases/auth_signout.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/auth_signup.dart';
 import 'package:ca_blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'auth_bloc_event.dart';
 part 'auth_bloc_state.dart';
@@ -64,6 +64,7 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     );
   }
 
+  //to get the current user event
   Future<void> _onGetCurrentUser(
     AuthGetCurrentUser event,
     Emitter<AuthBlocState> emit,
