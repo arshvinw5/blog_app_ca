@@ -2,6 +2,7 @@ import 'package:ca_blog_app/core/common/widgets/loader.dart';
 import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:ca_blog_app/core/utils/show_snackbar.dart';
 import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart';
+import 'package:ca_blog_app/features/auth/presentation/pages/sign_in_screen.dart';
 import 'package:ca_blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:ca_blog_app/features/blog/presentation/pages/add_blog_page.dart';
 import 'package:ca_blog_app/features/blog/presentation/widgets/blog_card.dart';
@@ -128,6 +129,11 @@ class _BlogPageState extends State<BlogPage> {
                         Navigator.of(dialogContext).pop(); // Dismiss dialog
                         // Trigger logout event
                         context.read<AuthBlocBloc>().add(AuthLogout());
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          SignInScreen.route(),
+                          (route) => false,
+                        );
                       },
                       child: Text('Logout'),
                     ),

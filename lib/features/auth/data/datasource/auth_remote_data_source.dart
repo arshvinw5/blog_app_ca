@@ -52,6 +52,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       return UserModel.fromJson(response.user!.toJson());
     } on AuthException catch (e) {
+      //auth exception is thrown by supabase when there is an error related to authentication
       throw ServerException(e.message);
     } catch (e) {
       // we are converting e. to string because it can be of any type
@@ -78,6 +79,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         response.user!.toJson(),
       ).copyWith(email: currentSession!.user.email);
     } on AuthException catch (e) {
+      //auth exception is thrown by supabase when there is an error related to authentication
       throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());

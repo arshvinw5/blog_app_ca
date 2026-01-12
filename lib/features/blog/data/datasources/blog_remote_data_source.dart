@@ -35,6 +35,9 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
       //cover the json to blog model
       //purpose of converting this to map is get the url from the supabase
       return BlogModel.fromMap(blogData);
+    } on PostgrestException catch (e) {
+      // fetching the error from supabase
+      throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -59,6 +62,9 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
 
       //to retrieve the public url of the image
       return supabaseClient.storage.from('blogs_images').getPublicUrl(blog.id);
+    } on StorageException catch (e) {
+      //fetching the error from supabase storage
+      throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -81,6 +87,9 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
                 )
                 .toList(),
           );
+    } on PostgrestException catch (e) {
+      // fetching the error from supabase
+      throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());
     }

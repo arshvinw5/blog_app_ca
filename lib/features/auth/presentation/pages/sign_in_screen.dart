@@ -4,6 +4,7 @@ import 'package:ca_blog_app/features/auth/presentation/bloc/auth_bloc_bloc.dart'
 import 'package:ca_blog_app/features/auth/presentation/pages/sign_up_screen.dart';
 import 'package:ca_blog_app/features/auth/presentation/widgets/auth_field.dart';
 import 'package:ca_blog_app/features/auth/presentation/widgets/auth_gradient_button.dart';
+import 'package:ca_blog_app/features/blog/presentation/pages/blog_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,7 +46,11 @@ class _SignInScreenState extends State<SignInScreen> {
                 fontSize: 15.0,
               );
             } else if (state is AuthSuccessState) {
-              print("User from user model: ${state.user.email}");
+              Navigator.pushAndRemoveUntil(
+                context,
+                BlogPage.route(),
+                (route) => false,
+              );
             }
           },
           builder: (context, state) {
