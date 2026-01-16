@@ -2,19 +2,13 @@ import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:flutter/material.dart';
 
 class BlogChips extends StatelessWidget {
-  final List<String> categories;
+  final List<String>? categories;
   final List<String>? selectedChips;
   final VoidCallback? onUpdate;
 
   const BlogChips({
     super.key,
-    this.categories = const [
-      'Technology',
-      'Health',
-      'Travel',
-      'Education',
-      'Food',
-    ],
+    this.categories,
     this.selectedChips,
     this.onUpdate,
   });
@@ -27,7 +21,7 @@ class BlogChips extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: categories
+        children: categories!
             .map(
               (category) => Padding(
                 padding: const EdgeInsets.only(right: 10.0),

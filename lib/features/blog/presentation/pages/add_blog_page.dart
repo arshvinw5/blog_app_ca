@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ca_blog_app/core/constants/constants.dart';
 import 'package:ca_blog_app/core/cubits/cubit/app_user_cubit.dart';
 import 'package:ca_blog_app/core/theme/app_palette.dart';
 import 'package:ca_blog_app/core/utils/pick_image.dart';
@@ -116,6 +117,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
                         : _dottedBorder(selectImage),
                     const SizedBox(height: 20),
                     BlogChips(
+                      categories: Constants.blogCategories,
                       selectedChips: selectedChips,
                       onUpdate: () {
                         setState(() {});

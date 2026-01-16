@@ -1,3 +1,4 @@
+import 'package:ca_blog_app/core/constants/constants.dart';
 import 'package:ca_blog_app/core/error/exceptions.dart';
 import 'package:ca_blog_app/core/error/failures.dart';
 import 'package:ca_blog_app/core/network/connection_checker.dart';
@@ -77,7 +78,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
         //if the session is null then return no internet connection failure
         if (session == null) {
-          return left(Failures('No internet connection'));
+          return left(Failures(Constants.noConnectionErrorMessage));
         }
 
         return right(
